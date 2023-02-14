@@ -1,0 +1,7 @@
+package com.financial.member.entity.enums;
+
+public enum Job {
+    OFFICE_WORKERS, PUBLIC_OFFICIAL, PROFESSION,
+    AGRICULTURAL_WORKER, BUISNESSMAN, FREELANCER,
+    HOUSEWIFE, STUDENT, SOLDIER, INOCCUPATION
+}
