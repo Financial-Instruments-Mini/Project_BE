@@ -23,6 +23,7 @@ public class Interest {
     private DueDate dueDate;
     private Double rate;
 
+    @Builder
     public Interest(Product product, DueDate dueDate, Double rate) {
         this.product = product;
         this.dueDate = dueDate;
