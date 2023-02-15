@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 @RequiredArgsConstructor
 public class MemberController {
@@ -16,7 +18,7 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("/signup")
-    public MemberResponse signup(@RequestBody MemberRequest memberRequest){
+    public MemberResponse signup(@RequestBody @Valid MemberRequest memberRequest){
         return memberService.signup(memberRequest);
     }
 
