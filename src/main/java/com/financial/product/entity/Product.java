@@ -5,9 +5,11 @@ import com.financial.member.entity.enums.Job;
 import com.financial.member.entity.enums.ProductType;
 import com.financial.product.entity.enums.BankName;
 import com.financial.product.entity.enums.JoinWay;
+import com.financial.product.entity.enums.Keyword;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,18 +40,37 @@ public abstract class Product {
     @Enumerated(EnumType.STRING)
     private Job job;
 
+    private LocalDate productMakeDay;
+
+    @Enumerated(EnumType.STRING)
+    private Keyword keyword;
+
     @OneToMany(mappedBy = "product")
     private List<Interest> interests = new ArrayList<>();
 
-
-    public Product(ProductType productType,BankName bankName, String productName, JoinWay joinWay, String content, Job job) {
+    public Product(ProductType productType, BankName bankName, String productName, JoinWay joinWay, String content, Job job, LocalDate productMakeDay, Keyword keyword) {
         this.productType = productType;
         this.bankName = bankName;
         this.productName = productName;
         this.joinWay = joinWay;
         this.content = content;
         this.job = job;
-   }
+        this.productMakeDay = productMakeDay;
+        this.keyword = keyword;
+    }
 
+    @Override
+    public String toString() {
+        return "Product{" +
+                "productType=" + productType +
+                ", bankName=" + bankName +
+                ", productName='" + productName + '\'' +
+                ", joinWay=" + joinWay +
+                ", content='" + content + '\'' +
+                ", job=" + job +
+                ", productMakeDay=" + productMakeDay +
+                ", keyword=" + keyword +
+                '}';
+    }
 }
 
