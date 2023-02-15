@@ -20,7 +20,7 @@ import java.util.List;
 @Setter
 public abstract class Product {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_id")
     private Long id;
     @Enumerated(EnumType.STRING)
