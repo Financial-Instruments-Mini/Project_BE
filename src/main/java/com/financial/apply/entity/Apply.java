@@ -34,3 +34,4 @@ public class Apply {
     private LocalDateTime applyTime;
 
 }
+

@@ -33,3 +33,4 @@ public class Interest {
         this.product = product;
     }
 }
+
