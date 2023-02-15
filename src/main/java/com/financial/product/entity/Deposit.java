@@ -14,18 +14,13 @@ import javax.persistence.Enumerated;
 @Entity
 @DiscriminatorValue("DEPOSIT")
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
 public class Deposit extends Product {
-    @Enumerated(EnumType.STRING)
-    private ProductType productType;
-    private Long maxLimit;
+
 
     @Builder
-    public Deposit(BankName bankName, String productName, JoinWay joinWay, String content, Job job, ProductType productType, Long maxLimit) {
-        super(bankName, productName, joinWay, content, job);
-        this.productType = productType;
-        this.maxLimit = maxLimit;
+    public Deposit(ProductType productType, BankName bankName, String productName, JoinWay joinWay, String content, Job job) {
+        super(productType, bankName, productName, joinWay, content, job);
     }
 }

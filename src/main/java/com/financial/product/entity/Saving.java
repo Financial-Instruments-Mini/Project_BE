@@ -20,12 +20,13 @@ import javax.persistence.Enumerated;
 @Setter
 @NoArgsConstructor
 public class Saving extends Product {
-    @Enumerated(EnumType.STRING)
-    private ProductType productType;
+
+    private Long maxLimit;
 
     @Builder
-    public Saving(BankName bankName, String productName, JoinWay joinWay, String content, Job job, ProductType productType) {
-        super(bankName, productName, joinWay, content, job);
-        this.productType = productType;
+
+    public Saving(ProductType productType, BankName bankName, String productName, JoinWay joinWay, String content, Job job, Long maxLimit) {
+        super(productType, bankName, productName, joinWay, content, job);
+        this.maxLimit = maxLimit;
     }
 }

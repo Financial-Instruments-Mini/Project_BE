@@ -2,6 +2,7 @@ package com.financial.product.entity;
 
 import com.financial.interest.entity.Interest;
 import com.financial.member.entity.enums.Job;
+import com.financial.member.entity.enums.ProductType;
 import com.financial.product.entity.enums.BankName;
 import com.financial.product.entity.enums.JoinWay;
 import lombok.*;
@@ -22,7 +23,8 @@ public abstract class Product {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "product_id")
     private Long id;
-
+    @Enumerated(EnumType.STRING)
+    private ProductType productType;
     @Enumerated(EnumType.STRING)
     private BankName bankName;
 
@@ -40,7 +42,8 @@ public abstract class Product {
     private List<Interest> interests = new ArrayList<>();
 
 
-    public Product(BankName bankName, String productName, JoinWay joinWay, String content, Job job) {
+    public Product(ProductType productType,BankName bankName, String productName, JoinWay joinWay, String content, Job job) {
+        this.productType = productType;
         this.bankName = bankName;
         this.productName = productName;
         this.joinWay = joinWay;
