@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@Setter
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -17,6 +16,7 @@ public class Member {
     private Long id;
     private String email;
     private String password;
+    private String name;
     private String phoneNumber;
     private String birthDate;
     @Embedded
