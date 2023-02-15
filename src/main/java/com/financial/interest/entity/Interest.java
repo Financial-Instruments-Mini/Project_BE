@@ -19,6 +19,7 @@ public class Interest {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "product_id")
     private Product product;
+    @Enumerated(EnumType.STRING)
     private DueDate dueDate;
     private Double rate;
 
