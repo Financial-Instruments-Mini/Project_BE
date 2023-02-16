@@ -53,5 +53,14 @@ public class ApplyService {
                 .map(MemberProductRes::fromApply)
                 .collect(Collectors.toList());
     }
+
+    public String deleteApply(MemberAdapter memberAdapter, Long applyId) {
+        if (memberAdapter != null) {
+            applyRepository.deleteById(applyId);
+            return "success";
+        } else {
+            return "fail";
+        }
+    }
 }
 
