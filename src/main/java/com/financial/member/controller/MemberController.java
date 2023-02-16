@@ -43,4 +43,11 @@ public class MemberController {
         memberService.updateInfo(request, member.getId());
         return BaseResponse.empty();
     }
+
+    @GetMapping("/member")
+    public BaseResponse<MemberResponse> MemberInfo(@AuthenticationPrincipal MemberAdapter memberAdapter){
+        Member member = memberAdapter.getMember();
+        MemberResponse memberResponse = MemberResponse.from(member);
+        return BaseResponse.of(memberResponse);
+    }
 }
