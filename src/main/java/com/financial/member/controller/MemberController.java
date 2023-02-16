@@ -38,7 +38,7 @@ public class MemberController {
 
 
     @PutMapping("/member")
-    public BaseResponse<?> updateInfo(@AuthenticationPrincipal MemberAdapter memberAdapter, @RequestBody MemberUpdateRequest request){
+    public BaseResponse<?> updateInfo(@AuthenticationPrincipal MemberAdapter memberAdapter, @RequestBody @Valid MemberUpdateRequest request){
         Member member = memberAdapter.getMember();
         memberService.updateInfo(request, member.getId());
         return BaseResponse.empty();
