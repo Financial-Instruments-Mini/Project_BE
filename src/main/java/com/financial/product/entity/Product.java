@@ -14,13 +14,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "DEPOSIT_OR_SAVING")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Getter
 @Setter
-public abstract class Product {
+public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_id")
@@ -45,10 +44,15 @@ public abstract class Product {
     @Enumerated(EnumType.STRING)
     private Keyword keyword;
 
+    private Long minimumAmount;
+
+    private Long maxLimit;
+
     @OneToMany(mappedBy = "product")
     private List<Interest> interests = new ArrayList<>();
 
-    public Product(ProductType productType, BankName bankName, String productName, JoinWay joinWay, String content, Job job, LocalDate productMakeDay, Keyword keyword) {
+    // 최소금액 있는 생성자
+    public Product(ProductType productType, BankName bankName, String productName, JoinWay joinWay, String content, Job job, LocalDate productMakeDay, Keyword keyword, Long minimumAmount, List<Interest> interests) {
         this.productType = productType;
         this.bankName = bankName;
         this.productName = productName;
@@ -57,20 +61,23 @@ public abstract class Product {
         this.job = job;
         this.productMakeDay = productMakeDay;
         this.keyword = keyword;
+        this.minimumAmount = minimumAmount;
+        this.interests = interests;
     }
 
-    @Override
-    public String toString() {
-        return "Product{" +
-                "productType=" + productType +
-                ", bankName=" + bankName +
-                ", productName='" + productName + '\'' +
-                ", joinWay=" + joinWay +
-                ", content='" + content + '\'' +
-                ", job=" + job +
-                ", productMakeDay=" + productMakeDay +
-                ", keyword=" + keyword +
-                '}';
+    // 최대한도 있는 생성자
+    public Product(Long id, ProductType productType, BankName bankName, String productName, JoinWay joinWay, String content, Job job, LocalDate productMakeDay, Keyword keyword, Long maxLimit, List<Interest> interests) {
+        this.id = id;
+        this.productType = productType;
+        this.bankName = bankName;
+        this.productName = productName;
+        this.joinWay = joinWay;
+        this.content = content;
+        this.job = job;
+        this.productMakeDay = productMakeDay;
+        this.keyword = keyword;
+        this.maxLimit = maxLimit;
+        this.interests = interests;
     }
 }
 
