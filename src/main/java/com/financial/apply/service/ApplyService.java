@@ -32,11 +32,13 @@ public class ApplyService {
         Member member = memberAdapter.getMember();
         Product product = productRepository.findById(request.getProductId()).orElseThrow(() -> new IllegalStateException());
         Interest interest = interestRepository.findById(request.getInterestId()).orElseThrow(() -> new IllegalStateException());
+
         Apply apply = Apply.createApply(member, product, interest);
+
         Apply savedApply = applyRepository.save(apply);
-        em.flush();
-        em.clear();
+
         Apply findApply = applyRepository.findById(savedApply.getId()).get();
+
         if (findApply != null) {
             return "success";
         } else {
