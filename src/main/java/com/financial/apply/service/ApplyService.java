@@ -1,6 +1,6 @@
 package com.financial.apply.service;
 
-import com.financial.apply.dto.MemberApplyRes;
+import com.financial.apply.dto.MemberProductRes;
 import com.financial.apply.entity.Apply;
 import com.financial.apply.repository.ApplyRepository;
 import com.financial.apply.dto.ApplyRegistrationReq;
@@ -48,9 +48,9 @@ public class ApplyService {
         }
     }
 
-    public List<MemberApplyRes> memberApply(Long memberId){
+    public List<MemberProductRes> memberApply(Long memberId){
         return applyRepository.findByMemberId(memberId).stream()
-                .map(MemberApplyRes::from)
+                .map(MemberProductRes::from)
                 .collect(Collectors.toList());
     }
 }

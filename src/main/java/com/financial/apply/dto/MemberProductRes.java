@@ -11,7 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class MemberApplyRes {
+public class MemberProductRes {
     private Long productId;
     private BankName bankName;
     private ProductType productType;
@@ -22,8 +22,8 @@ public class MemberApplyRes {
     private Double rate;
 
 
-    public static MemberApplyRes from(Apply apply){
-        return MemberApplyRes.builder()
+    public static MemberProductRes from(Apply apply){
+        return MemberProductRes.builder()
                 .productId(apply.getProduct().getId())
                 .bankName(apply.getProduct().getBankName())
                 .productType(apply.getProduct().getProductType())

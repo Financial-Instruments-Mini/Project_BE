@@ -1,8 +1,9 @@
 package com.financial.apply.controller;
 
 import com.financial.apply.dto.ApplyRegistrationReq;
-import com.financial.apply.dto.MemberApplyRes;
+import com.financial.apply.dto.MemberProductRes;
 import com.financial.apply.service.ApplyService;
+import com.financial.global.response.BaseResponse;
 import com.financial.member.dto.MemberAdapter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -24,8 +25,8 @@ public class ApplyController {
     }
 
     @GetMapping("/api/v1/apply")
-    public List<MemberApplyRes> memberApply(@AuthenticationPrincipal MemberAdapter memberAdapter){
-        return applyService.memberApply(memberAdapter.getMember().getId());
+    public BaseResponse<List<MemberProductRes>> memberApply(@AuthenticationPrincipal MemberAdapter memberAdapter){
+        return BaseResponse.of(applyService.memberApply(memberAdapter.getMember().getId()));
     }
 
 }
