@@ -1,6 +1,6 @@
 package com.financial.member.service;
 
-import com.financial.member.dto.MemberDetails;
+import com.financial.member.dto.MemberAdapter;
 import com.financial.member.entity.Member;
 import com.financial.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +21,7 @@ public class MemberDetailService implements UserDetailsService {
                 () -> new IllegalArgumentException("유저를 찾을 수 없습니다.")
         );
 
-        return MemberDetails.of(member);
+        //return MemberDetails.of(member);
+        return new MemberAdapter(member);
     }
 }

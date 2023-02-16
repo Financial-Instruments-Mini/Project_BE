@@ -3,11 +3,13 @@ package com.financial.member.entity;
 import com.financial.member.entity.enums.IsMember;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+
 //1번 아이디 글자 수
 //        아이디 글자 패턴
 //        아이디 = email
@@ -21,6 +23,7 @@ import java.time.LocalDateTime;
 @Entity
 @ToString
 @Getter
+@DynamicInsert //insert 시 지정된 default 값 적용 시킴
 @EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {

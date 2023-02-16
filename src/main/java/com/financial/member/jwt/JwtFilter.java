@@ -5,6 +5,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -21,14 +22,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
-        String bearer = request.getHeader(HttpHeaders.AUTHORIZATION);
-
-        if (!isBearer(bearer)) {
-            chain.doFilter(request, response);
-            return;
-        }
-
-        String token = bearer.substring(JwtProperties.TOKEN_PREFIX.length());
+        String token = resolveToken(request);
 
         if (jwtUtils.isValidToken(token)) {
             Authentication authentication = jwtUtils.getAuthentication(token);
@@ -37,7 +31,11 @@ public class JwtFilter extends OncePerRequestFilter {
         chain.doFilter(request, response);
     }
 
-    private boolean isBearer(String bearer) {
-        return bearer != null && bearer.startsWith("Bearer ");
+    private String resolveToken(HttpServletRequest request) {
+        String bearerToken = request.getHeader(HttpHeaders.AUTHORIZATION);
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(JwtProperties.TOKEN_PREFIX)) {
+            return bearerToken.substring(JwtProperties.TOKEN_PREFIX.length());
+        }
+        return null;
     }
 }
