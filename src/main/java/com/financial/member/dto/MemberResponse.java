@@ -27,6 +27,16 @@ public class MemberResponse {
     private BankName bankName;
 
     public static MemberResponse from(Member member){
+        if (member.getSurvey() == null) {
+            return MemberResponse.builder()
+                    .memberId(member.getId())
+                    .email(member.getEmail())
+                    .password(member.getPassword())
+                    .name(member.getName())
+                    .phoneNumber(member.getPhoneNumber())
+                    .birthDate(member.getBirthDate())
+                    .build();
+        }
         return MemberResponse.builder()
                 .memberId(member.getId())
                 .email(member.getEmail())
