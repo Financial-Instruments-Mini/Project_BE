@@ -6,26 +6,24 @@ import com.financial.member.entity.Member;
 import com.financial.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 @RestController
+@RequestMapping("/api/v1")
 @RequiredArgsConstructor
 public class MemberController {
 
     private final MemberService memberService;
 
-    @PostMapping("/signup")
+    @PostMapping("/auth/signup")
     public BaseResponse<MemberResponse> signup(@RequestBody @Valid MemberRequest memberRequest) {
         MemberResponse memberResponse = memberService.signup(memberRequest);
         return BaseResponse.of(memberResponse);
     }
 
-    @PostMapping("/login")
+    @PostMapping("/auth/login")
     public BaseResponse<MemberResponse> login(@RequestBody @Valid LoginRequest loginRequest) {
         MemberResponse memberResponse = memberService.login(loginRequest);
         return BaseResponse.of(memberResponse);
@@ -39,4 +37,17 @@ public class MemberController {
     }
 
 
+    @PutMapping("/member")
+    public BaseResponse<?> updateInfo(@AuthenticationPrincipal MemberAdapter memberAdapter, @RequestBody @Valid MemberUpdateRequest request){
+        Member member = memberAdapter.getMember();
+        memberService.updateInfo(request, member.getId());
+        return BaseResponse.empty();
+    }
+
+    @GetMapping("/member")
+    public BaseResponse<MemberResponse> MemberInfo(@AuthenticationPrincipal MemberAdapter memberAdapter){
+        Member member = memberAdapter.getMember();
+        MemberResponse memberResponse = MemberResponse.from(member);
+        return BaseResponse.of(memberResponse);
+    }
 }

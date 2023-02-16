@@ -27,4 +27,16 @@ public class Survey {
         this.job = job;
         this.bankName = bankName;
     }
+
+    public void updateSurvey(Survey survey){
+        if (survey.getProductType() != null) {
+            this.productType=survey.getProductType();
+        }
+        if (survey.getJob() != null) {
+            this.job=survey.getJob();
+        }
+        if (survey.getBankName() != null) {
+            this.bankName=survey.getBankName();
+        }
+    }
 }
