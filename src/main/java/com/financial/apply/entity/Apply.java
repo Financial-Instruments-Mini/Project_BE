@@ -33,5 +33,14 @@ public class Apply {
 
     private LocalDateTime applyTime;
 
+    public static Apply createApply(Member member, Product product, Interest interest) {
+        Apply apply = new Apply();
+        apply.member = member;
+        apply.product = product;
+        apply.interest = interest;
+        apply.applyTime = LocalDateTime.now();
+        return apply;
+    }
+
 }
 
