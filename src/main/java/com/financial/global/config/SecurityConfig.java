@@ -16,7 +16,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    String[] matchers = {"/","/signup", "/login/**"};
+    String[] matchers = {"/","/signup", "/login/**", "/api/v1/keyword/**"};
 
     private final JwtFilter jwtFilter;
 
