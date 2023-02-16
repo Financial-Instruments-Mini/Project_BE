@@ -1,5 +1,6 @@
 package com.financial.member.entity;
 
+import com.financial.member.dto.MemberUpdateRequest;
 import com.financial.member.entity.enums.IsMember;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -54,6 +55,23 @@ public class Member {
         this.phoneNumber = phoneNumber;
         this.birthDate = birthDate;
         this.survey = survey;
+    }
+
+    public void updateMember(MemberUpdateRequest request){
+        Survey surveyRequest = Survey.builder()
+                .productType(request.getProductType())
+                .job(request.getJob())
+                .bankName(request.getBankName())
+                .build();
+        if (request.getPassword() != null) {
+            this.password=request.getPassword();
+        }
+        if (request.getPhoneNumber() != null) {
+            this.phoneNumber=request.getPhoneNumber();
+        }
+        if (request.getProductType() != null) {
+            this.survey.updateSurvey(surveyRequest);
+        }
     }
 }
 
