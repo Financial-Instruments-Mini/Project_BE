@@ -1,9 +1,6 @@
 package com.financial.member.dto;
 
 import com.financial.member.entity.Member;
-import com.financial.member.entity.enums.Job;
-import com.financial.member.entity.enums.ProductType;
-import com.financial.product.entity.enums.BankName;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,9 +19,9 @@ public class MemberResponse {
     private String phoneNumber;
     private String birthDate;
 
-    private ProductType productType;
-    private Job job;
-    private BankName bankName;
+    private String productType;
+    private String job;
+    private String bankName;
 
     public static MemberResponse from(Member member){
         if (member.getSurvey() == null) {
@@ -44,9 +41,9 @@ public class MemberResponse {
                 .name(member.getName())
                 .phoneNumber(member.getPhoneNumber())
                 .birthDate(member.getBirthDate())
-                .productType(member.getSurvey().getProductType())
-                .job(member.getSurvey().getJob())
-                .bankName(member.getSurvey().getBankName())
+                .productType(member.getSurvey().getProductType().getType())
+                .job(member.getSurvey().getJob().getJobName())
+                .bankName(member.getSurvey().getBankName().getBankName())
                 .build();
     }
 }
