@@ -1,9 +1,9 @@
 package com.financial.apply.service;
 
+import com.financial.apply.dto.MemberProductRes;
 import com.financial.apply.entity.Apply;
 import com.financial.apply.repository.ApplyRepository;
 import com.financial.apply.dto.ApplyRegistrationReq;
-import com.financial.bookmark.entity.Bookmark;
 import com.financial.interest.entity.Interest;
 import com.financial.interest.repository.InterestRepository;
 import com.financial.member.dto.MemberAdapter;
@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -44,6 +46,12 @@ public class ApplyService {
         } else {
             return "fail";
         }
+    }
+
+    public List<MemberProductRes> memberApply(Long memberId){
+        return applyRepository.findByMemberId(memberId).stream()
+                .map(MemberProductRes::fromApply)
+                .collect(Collectors.toList());
     }
 }
 
