@@ -50,7 +50,7 @@ public class ApplyService {
 
     public List<MemberProductRes> memberApply(Long memberId){
         return applyRepository.findByMemberId(memberId).stream()
-                .map(MemberProductRes::from)
+                .map(MemberProductRes::fromApply)
                 .collect(Collectors.toList());
     }
 }
