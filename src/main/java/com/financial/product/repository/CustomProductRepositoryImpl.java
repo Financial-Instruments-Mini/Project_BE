@@ -2,7 +2,6 @@ package com.financial.product.repository;
 
 import com.financial.product.dto.ProductListDto;
 import com.financial.product.entity.Product;
-import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.NullExpression;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
@@ -26,18 +25,13 @@ public class CustomProductRepositoryImpl implements CustomProductRepository {
     private final JPAQueryFactory query;
 
     @Override
-    public Slice<ProductListDto> allProductPage(Long lastId, Pageable pageable, String sort) {
-
-        BooleanBuilder dynamicLtId = new BooleanBuilder();
-
-        if (lastId != null) {
-            dynamicLtId.and(product.id.lt(lastId));
-        }
-
+    public Slice<ProductListDto> allProductPage(Pageable pageable, String sort) {
         List<Product> fetch = query
                 .selectFrom(product)
+                .where()
                 .orderBy(orderByMakeProductDay(sort))
                 .orderBy(orderByInterest(sort))
+                .offset(pageable.getOffset())
                 .limit(pageable.getPageSize() + 1)
                 .fetch();
 

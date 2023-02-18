@@ -17,7 +17,7 @@ public class ProductService {
     private final ProductRepository productRepository;
 
     public Slice<ProductListDto> allProductList(Pageable pageable, String sort){
-        Slice<ProductListDto> products = productRepository.allProductPage(5L, pageable, sort);
+        Slice<ProductListDto> products = productRepository.allProductPage(pageable, sort);
 
         return products;
     }

@@ -7,11 +7,8 @@ import com.financial.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,7 +20,7 @@ public class ProductController {
     @GetMapping("/")
     public BaseResponse<Slice<ProductListDto>> allProductList(
             @RequestParam(value = "sort", required = false, defaultValue = "interest") String sort,
-            Pageable pageable) {
+            @PageableDefault(size = 5) Pageable pageable) {
         return new BaseResponse<>(productService.allProductList(pageable, sort));
     }
 
