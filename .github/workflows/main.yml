@@ -28,7 +28,7 @@ jobs:
       - name: Make application.properties
         run: |
           cd ./src/main/resources
-          touch ./application.properties
+          touch ./application-profile.properties
           
           echo "${{ secrets.DATABASE_PROPERTIES }}" >> ./application.properties
         shell: bash
