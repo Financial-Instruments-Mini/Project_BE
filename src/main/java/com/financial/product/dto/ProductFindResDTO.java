@@ -10,6 +10,7 @@ public class ProductFindResDTO {
     private String productName;
     private String bankName;
 
+
     public ProductFindResDTO(Product product) {
         this.id = product.getId();
         this.productName = product.getProductName();
