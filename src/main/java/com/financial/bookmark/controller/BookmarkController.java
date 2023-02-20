@@ -1,6 +1,7 @@
 package com.financial.bookmark.controller;
 
 import com.financial.apply.dto.MemberProductRes;
+import com.financial.bookmark.dto.BookmarkRegistrationReq;
 import com.financial.bookmark.service.BookmarkService;
 import com.financial.global.response.BaseResponse;
 import com.financial.member.dto.MemberAdapter;
