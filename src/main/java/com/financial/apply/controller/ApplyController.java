@@ -13,15 +13,16 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/v1/apply")
 public class ApplyController {
     private final ApplyService applyService;
 
-    @PostMapping("/api/v1/apply")
+    @PostMapping
     public String applyRegistration(@AuthenticationPrincipal MemberAdapter memberAdapter, @RequestBody ApplyRegistrationReq request) {
         return applyService.applyRegistration(memberAdapter, request);
     }
 
-    @GetMapping("/api/v1/apply")
+    @GetMapping
     public BaseResponse<List<MemberProductRes>> memberApply(@AuthenticationPrincipal MemberAdapter memberAdapter) {
         return BaseResponse.of(applyService.memberApply(memberAdapter.getMember().getId()));
     }

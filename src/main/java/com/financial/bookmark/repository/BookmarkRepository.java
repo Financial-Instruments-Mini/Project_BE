@@ -10,5 +10,7 @@ public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
 //@EntityGraph(attributePaths = {"member","product","interest"})
 List<Bookmark> findByMemberId(Long id);
 
+    void deleteAllByMember_Id(Long memberId);
+
 
 }
