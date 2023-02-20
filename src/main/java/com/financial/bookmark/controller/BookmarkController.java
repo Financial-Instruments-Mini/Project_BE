@@ -14,11 +14,12 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/v1/bookmarks")
 public class BookmarkController {
 
     private final BookmarkService bookmarkService;
 
-    @GetMapping("/api/v1/bookmarks")
+    @GetMapping
     public BaseResponse<Slice<MemberProductRes>> memberBookmarks(@AuthenticationPrincipal MemberAdapter memberAdapter, Pageable pageable){
         PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize());
         return BaseResponse.of(bookmarkService.memberBookmarks(memberAdapter.getMember().getId(), pageRequest));

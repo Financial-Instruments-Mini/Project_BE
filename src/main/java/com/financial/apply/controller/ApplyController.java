@@ -14,21 +14,22 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/v1/apply")
 public class ApplyController {
     private final ApplyService applyService;
 
-    @PostMapping("/api/v1/apply")
+    @PostMapping
     public String applyRegistration(@AuthenticationPrincipal MemberAdapter memberAdapter, @RequestBody ApplyRegistrationReq request) {
         return applyService.applyRegistration(memberAdapter, request);
     }
 
-    @GetMapping("/api/v1/apply")
+    @GetMapping
     public BaseResponse<Slice<MemberProductRes>> memberApply(@AuthenticationPrincipal MemberAdapter memberAdapter, Pageable pageable) {
         PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize());
         return BaseResponse.of(applyService.memberApply(memberAdapter.getMember().getId(), pageRequest));
     }
 
-    @DeleteMapping("/api/v1/apply/{applyId}")
+    @DeleteMapping("/{applyId}")
     public String applyDelete(@AuthenticationPrincipal MemberAdapter memberAdapter, @PathVariable Long applyId) {
         return applyService.deleteApply(memberAdapter, applyId);
     }
