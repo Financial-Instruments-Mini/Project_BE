@@ -64,4 +64,14 @@ public class BookmarkService {
 
         return "삭제에 실패 하였습니다.";
     }
+
+    @Transactional
+    public String deleteBookmark(MemberAdapter memberAdapter, Long bookmarkId) {
+        if (memberAdapter != null) {
+            bookmarkRepository.deleteById(bookmarkId);
+            return "success";
+        } else {
+            return "fail";
+        }
+    }
 }
