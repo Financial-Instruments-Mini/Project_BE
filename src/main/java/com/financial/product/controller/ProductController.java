@@ -3,7 +3,6 @@ package com.financial.product.controller;
 import com.financial.global.response.BaseResponse;
 import com.financial.interest.dto.InterestByAll;
 import com.financial.product.dto.ProductDetailResponseDTO;
-//import com.financial.product.dto.ProductListDto;
 import com.financial.product.dto.ProductFindResDTO;
 import com.financial.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -40,7 +38,7 @@ public class ProductController {
         return BaseResponse.of(sortedProduct);
     }
 
-    @GetMapping("/product/{products_id}")
+    @GetMapping("/{products_id}")
     public BaseResponse<ProductDetailResponseDTO> productsDetail(@PathVariable Long products_id) {
         ProductDetailResponseDTO productsDetail = productService.productsDetail(products_id);
         return BaseResponse.of(productsDetail);

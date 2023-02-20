@@ -1,7 +1,6 @@
 package com.financial.bookmark.service;
 
 import com.financial.apply.dto.MemberProductRes;
-import com.financial.apply.entity.Apply;
 import com.financial.bookmark.dto.BookmarkRegistrationReq;
 import com.financial.bookmark.entity.Bookmark;
 import com.financial.bookmark.repository.BookmarkRepository;
@@ -12,11 +11,12 @@ import com.financial.member.entity.Member;
 import com.financial.product.entity.Product;
 import com.financial.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -27,10 +27,9 @@ public class BookmarkService {
     private final InterestRepository interestRepository;
 
 
-    public List<MemberProductRes> memberBookmarks(Long memberId) {
-        return bookmarkRepository.findByMemberId(memberId).stream()
-                .map(MemberProductRes::fromBookmark)
-                .collect(Collectors.toList());
+    public Slice<MemberProductRes> memberBookmarks(Long memberId, Pageable pageable) {
+        return bookmarkRepository.findByMemberId(memberId, pageable)
+                .map(MemberProductRes::fromBookmark);
     }
 
     @Transactional

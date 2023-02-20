@@ -11,16 +11,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-//1번 아이디 글자 수
-//        아이디 글자 패턴
-//        아이디 = email
-//        2번 비밀번호
-//        글자수 = 8이상 12자 이하
-//        패턴 = 영문 숫자 특수문자
-//        최소 1글자씩
-//        이름은 한글만 2글자 이상
-//        생년월일 19990909
-//        01012341234
 @Entity
 @ToString
 @Getter
