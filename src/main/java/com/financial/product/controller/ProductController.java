@@ -3,7 +3,6 @@ package com.financial.product.controller;
 import com.financial.global.response.BaseResponse;
 import com.financial.interest.dto.InterestByAll;
 import com.financial.product.dto.ProductDetailResponseDTO;
-import com.financial.product.dto.ProductFindResDTO;
 import com.financial.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +27,7 @@ public class ProductController {
 //    }
 
     @GetMapping
-    public BaseResponse allProduct(Pageable pageable, @RequestParam(value = "sort", required = false) String sort) {
+    public BaseResponse<?> allProduct(Pageable pageable, @RequestParam(value = "sort", required = false) String sort) {
         PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize());
         if (sort.equals("last")) {
             Slice<InterestByAll> sortedProduct = productService.findALlProductSortByMakeDay(pageRequest);
@@ -45,9 +44,17 @@ public class ProductController {
     }
 
     @GetMapping("/search")
-    public BaseResponse productSearch(Pageable pageable, @RequestParam String search) {
+    public BaseResponse<?> productSearch(
+            Pageable pageable,
+            @RequestParam String search,
+            @RequestParam(required = false) String sort
+    ) {
         PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize());
-        Slice<ProductFindResDTO> productSearch = productService.findProductSearch(pageRequest,search);
+        if (sort.equals("last")){
+            Slice<InterestByAll> productSearch = productService.findProductSearchByMakeDay(pageRequest,search);
+            return BaseResponse.of(productSearch);
+        }
+        Slice<InterestByAll> productSearch = productService.findProductSearchByInterest(pageRequest,search);
         return BaseResponse.of(productSearch);
     }
 }

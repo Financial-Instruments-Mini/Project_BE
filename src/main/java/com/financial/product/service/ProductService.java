@@ -4,13 +4,10 @@ import com.financial.interest.dto.InterestByAll;
 import com.financial.interest.entity.Interest;
 import com.financial.interest.repository.InterestRepository;
 import com.financial.product.dto.ProductDetailResponseDTO;
-//import com.financial.product.dto.ProductListDto;
-import com.financial.product.dto.ProductFindResDTO;
 import com.financial.product.entity.Product;
 import com.financial.product.entity.enums.DueDate;
 import com.financial.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -48,9 +45,15 @@ public class ProductService {
         return sortedProduct;
     }
 
-    public Slice<ProductFindResDTO> findProductSearch(Pageable pageable, String search) {
-        Slice<Product> findProducts = productRepository.findProductByProductNameContaining(pageable,search);
-        Slice<ProductFindResDTO> findProductsDto = findProducts.map(product -> new ProductFindResDTO(product));
+    public Slice<InterestByAll> findProductSearchByInterest(Pageable pageable, String search) {
+        Slice<Interest> findProducts = interestRepository.findAllByDueDateAndProductProductNameContainingOrderByRateDesc(pageable, DueDate.TWENTY_FOUR, search);
+        Slice<InterestByAll> findProductsDto = findProducts.map(interest -> new InterestByAll(interest));
+        return findProductsDto;
+    }
+
+    public Slice<InterestByAll> findProductSearchByMakeDay(Pageable pageable, String search) {
+        Slice<Interest> findProducts = interestRepository.findAllByDueDateAndProductProductNameContainingOrderByProductProductMakeDay(pageable, DueDate.TWENTY_FOUR,search);
+        Slice<InterestByAll> findProductsDto = findProducts.map(interest -> new InterestByAll(interest));
         return findProductsDto;
     }
 }
