@@ -1,7 +1,6 @@
 package com.financial.bookmark.service;
 
 import com.financial.apply.dto.MemberProductRes;
-import com.financial.apply.entity.Apply;
 import com.financial.bookmark.dto.BookmarkRegistrationReq;
 import com.financial.bookmark.entity.Bookmark;
 import com.financial.bookmark.repository.BookmarkRepository;
@@ -16,6 +15,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
