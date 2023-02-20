@@ -41,12 +41,13 @@ public class Bookmark {
         this.product = product;
     }
 
-    public Bookmark crateBookMark(Member member, Product product, Interest interest) {
-        this.member = member;
-        this.product = product;
-        this.interest = interest;
-        this.bookMarkTime = LocalDateTime.now();
-        return this;
+    public static Bookmark crateBookMark(Member member, Product product, Interest interest) {
+        Bookmark bookmark = new Bookmark();
+        bookmark.member = member;
+        bookmark.product = product;
+        bookmark.interest = interest;
+        bookmark.bookMarkTime = LocalDateTime.now();
+        return bookmark;
     }
 
 }
