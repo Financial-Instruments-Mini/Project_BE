@@ -35,4 +35,9 @@ public class BookmarkController {
         return bookmarkService.deleteAllBookmark(memberAdapter);
     }
 
+    @DeleteMapping("/{bookmarkId}")
+    public String bookmarkDelete(@AuthenticationPrincipal MemberAdapter memberAdapter, @PathVariable Long bookmarkId) {
+        return bookmarkService.deleteBookmark(memberAdapter, bookmarkId);
+    }
+
 }
