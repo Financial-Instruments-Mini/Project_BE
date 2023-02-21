@@ -1,13 +1,21 @@
 package com.financial.member.service;
 
+import com.financial.interest.entity.Interest;
+import com.financial.interest.repository.InterestRepository;
 import com.financial.member.dto.*;
 import com.financial.member.entity.Member;
 import com.financial.member.entity.RefreshToken;
+import com.financial.member.entity.enums.Job;
+import com.financial.member.entity.enums.ProductType;
 import com.financial.member.jwt.JwtUtils;
 import com.financial.member.repository.MemberRepository;
 import com.financial.member.repository.RefreshTokenRepository;
+import com.financial.product.entity.enums.DueDate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +33,8 @@ public class MemberService {
     private final JwtUtils jwtUtils;
 
     private final RefreshTokenRepository refreshTokenRepository;
+
+    private final InterestRepository interestRepository;
 
     @Transactional
     public MemberResponse signup(MemberRequest memberRequest) {
@@ -115,5 +125,22 @@ public class MemberService {
 
     public boolean isDuplicate(String email) {
         return memberRepository.existsByEmail(email);
+    }
+
+    public Slice<MemberRecommendDTO> getMemberRecommend(Pageable pageable, MemberAdapter memberAdapter) {
+        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize());
+        Member member = memberAdapter.getMember();
+        ProductType loginMemberProductType = member.getSurvey().getProductType();
+        Job loginMemberJob = member.getSurvey().getJob();
+
+        if (loginMemberProductType == ProductType.DEPOSIT_AND_SAVING) {
+            Slice<Interest> findMemberRecommend = interestRepository.findAllByDueDateAndProductJob(pageRequest, DueDate.TWENTY_FOUR, loginMemberJob);
+            Slice<MemberRecommendDTO> findMemberRecommendDTO = findMemberRecommend.map(interest -> new MemberRecommendDTO(interest));
+            return findMemberRecommendDTO;
+        }
+
+        Slice<Interest> findMemberRecommend = interestRepository.findAllByDueDateAndProductProductTypeAndProductJob(pageRequest, DueDate.TWENTY_FOUR, loginMemberProductType, loginMemberJob);
+        Slice<MemberRecommendDTO> findMemberRecommendDTO = findMemberRecommend.map(interest -> new MemberRecommendDTO(interest));
+        return findMemberRecommendDTO;
     }
 }
