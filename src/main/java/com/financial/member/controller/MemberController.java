@@ -5,6 +5,8 @@ import com.financial.member.dto.*;
 import com.financial.member.entity.Member;
 import com.financial.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -54,5 +56,11 @@ public class MemberController {
     @PostMapping("/auth/refresh")
     public BaseResponse<TokenDto> reIssue(@RequestBody TokenRequestDto tokenRequestDto){
         return BaseResponse.of(memberService.reIssue(tokenRequestDto.getRefreshToken()));
+    }
+
+    @GetMapping("/member/recommend")
+    public BaseResponse<Slice<MemberRecommendDTO>> memberRecommend(@AuthenticationPrincipal MemberAdapter memberAdapter, Pageable pageable) {
+        Slice<MemberRecommendDTO> memberRecommend = memberService.getMemberRecommend(pageable, memberAdapter);
+        return BaseResponse.of(memberRecommend);
     }
 }
