@@ -34,27 +34,11 @@ public class MemberService {
         memberRequest.encodePassword(passwordEncoder);
         Member member = memberRepository.save(memberRequest.toEntity());
         MemberResponse memberResponse = MemberResponse.from(member);
-        Date date = new Date();
-        String accessToken = jwtUtils.createToken(member);
-        String refreshToken = jwtUtils.createRefreshToken(member.getId());
-
-        memberResponse.setTokenDto(
-                TokenDto.builder()
-                        .accessToken(accessToken)
-                        .refreshToken(refreshToken)
-                        .accessStartTime(String.valueOf(date))
-                        .accessExpirationTime(jwtUtils.getExpiration(accessToken))
-                        .build()
-        );
+        TokenDto tokenDto = issueToken(member);
+        memberResponse.setTokenDto(tokenDto);
 
         RefreshToken originRefreshToken = refreshTokenRepository.findByMemberId(member.getId()).orElse(null);
-        if (originRefreshToken == null) {
-            RefreshToken refreshTokenEn = RefreshToken.builder().memberId(member.getId()).token(refreshToken).build();
-            refreshTokenRepository.save(refreshTokenEn);
-        } else {
-            originRefreshToken.updateToken(refreshToken);
-        }
-        //memberResponse.setAccessToken(jwtUtils.createToken(member));
+        updateToken(member, tokenDto, originRefreshToken);
         return memberResponse;
     }
 
@@ -68,26 +52,22 @@ public class MemberService {
         MemberResponse memberResponse = MemberResponse.from(member);
 
         if (passwordEncoder.matches(loginRequest.getPassword(), member.getPassword())) {
-            Date date = new Date();
-            String accessToken = jwtUtils.createToken(member);
-            String refreshToken = jwtUtils.createRefreshToken(member.getId());
-            memberResponse.setTokenDto(
-                    TokenDto.builder()
-                            .accessToken(accessToken)
-                            .refreshToken(refreshToken)
-                            .accessStartTime(String.valueOf(date))
-                            .accessExpirationTime(jwtUtils.getExpiration(accessToken))
-                            .build());
+            TokenDto tokenDto = issueToken(member);
+            memberResponse.setTokenDto(tokenDto);
 
             RefreshToken originRefreshToken = refreshTokenRepository.findByMemberId(member.getId()).orElse(null);
-            if (originRefreshToken == null) {
-                RefreshToken refreshTokenEn = RefreshToken.builder().memberId(member.getId()).token(refreshToken).build();
-                refreshTokenRepository.save(refreshTokenEn);
-            } else {
-                originRefreshToken.updateToken(refreshToken);
-            }
+            updateToken(member, tokenDto, originRefreshToken);
         }
         return memberResponse;
+    }
+
+    private void updateToken(Member member, TokenDto tokenDto, RefreshToken originRefreshToken) {
+        if (originRefreshToken == null) {
+            RefreshToken refreshToken = RefreshToken.builder().memberId(member.getId()).token(tokenDto.getRefreshToken()).build();
+            refreshTokenRepository.save(refreshToken);
+        } else {
+            originRefreshToken.updateToken(tokenDto.getRefreshToken());
+        }
     }
 
     @Transactional
@@ -108,22 +88,24 @@ public class MemberService {
             throw new IllegalArgumentException("리프레시 토큰이 불일치 합니다.");
         }
 
+        TokenDto tokenDto = issueToken(member);
+        originRefreshToken.updateToken(tokenDto.getRefreshToken());
+
+        return tokenDto;
+    }
+
+    public TokenDto issueToken(Member member) {
         Date date = new Date();
         String accessToken = jwtUtils.createToken(member);
-        String newRefreshToken = jwtUtils.createRefreshToken(memberId);
-        originRefreshToken.updateToken(newRefreshToken);
-        refreshTokenRepository.save(originRefreshToken);
+        String refreshToken = jwtUtils.createRefreshToken(member.getId());
 
         return TokenDto.builder()
                 .accessToken(accessToken)
-                .refreshToken(originRefreshToken.getToken())
+                .refreshToken(refreshToken)
                 .accessStartTime(String.valueOf(date))
                 .accessExpirationTime(jwtUtils.getExpiration(accessToken))
                 .build();
-
-
     }
-
 
     @Transactional
     public void updateInfo(MemberUpdateRequest request, Long memberId) {
