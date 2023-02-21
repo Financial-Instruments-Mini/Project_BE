@@ -49,6 +49,16 @@ public class GlobalExceptionHandler implements ErrorController {
         return new ResponseEntity<>(response, HttpStatus.METHOD_NOT_ALLOWED);
     }
 
+    /**
+     * 사용자가 존재하지 않는 product 의 detail 페이지에 접근하려 할 경우 발생
+     */
+    @ExceptionHandler(IllegalStateException.class)
+    protected ResponseEntity<ErrorResponse> handleIllegalStateException(IllegalStateException e) {
+        log.error("IllegalStateException", e);
+        ErrorResponse response = ErrorResponse.of(ErrorCode.BAD_REQUEST);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(BusinessException.class)
     protected ResponseEntity<ErrorResponse> handleBusinessException(BusinessException e){
         log.error("handleBusinessException", e);
