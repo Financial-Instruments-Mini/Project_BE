@@ -12,7 +12,9 @@ public enum ErrorCode {
     ENTITY_NOT_FOUND(false, 1002, " Entity Not Found"),
     INTERNAL_SERVER_ERROR(false, 1003, "Server Error"),
     INVALID_TYPE_VALUE(false, 1004, " Invalid Type Value"),
-    HANDLE_ACCESS_DENIED(false, 1005, "Access is Denied");
+    HANDLE_ACCESS_DENIED(false, 1005, "Access is Denied"),
+    BAD_REQUEST(false,1006,"Bad Request");
+
     private final boolean success;
     private final int code;
     private final String message;
