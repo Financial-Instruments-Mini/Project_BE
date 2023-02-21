@@ -23,7 +23,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    String[] matchers = {"/","/api/v1/auth/**","/api/v1/keyword/**", "/api/v1/products/**","/api/v1/products/"};
+    String[] matchers = {"/","/api/v1/auth/**","/api/v1/keyword/**", "/api/v1/products/**","/api/v1/products/"
+            ,"/swagger-ui.html","/swagger/**", "/swagger-resources/**", "/webjars/**", "/v2/api-docs"};
 
     private final JwtFilter jwtFilter;
 
