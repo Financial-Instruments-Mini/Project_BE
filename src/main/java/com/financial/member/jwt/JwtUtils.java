@@ -1,10 +1,7 @@
 package com.financial.member.jwt;
 
 import com.financial.member.entity.Member;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -28,6 +25,18 @@ public class JwtUtils {
                 .setIssuer("ticcle")
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime()+JwtProperties.VALID_TIME))
+                .signWith(SignatureAlgorithm.HS256, JwtProperties.SECRET_KEY)
+                .compact();
+    }
+
+    public String createRefreshToken(Long memberId){
+        Claims claims = Jwts.claims().setSubject(String.valueOf(memberId));
+        Date now = new Date();
+        return Jwts.builder()
+                .setClaims(claims)
+                .setIssuer("ticcle")
+                .setIssuedAt(now)
+                .setExpiration(new Date(now.getTime()+JwtProperties.REFRESH_VALID_TIME))
                 .signWith(SignatureAlgorithm.HS256, JwtProperties.SECRET_KEY)
                 .compact();
     }
@@ -62,6 +71,10 @@ public class JwtUtils {
         }catch (JwtException | NullPointerException exception){
             return false;
         }
+    }
+
+    public String getExpiration(String token){
+        return String.valueOf(getClaimsFromToken(token).getExpiration());
     }
 
 

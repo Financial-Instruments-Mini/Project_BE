@@ -7,7 +7,7 @@ public enum ErrorCode {
 
     INVALID_INPUT_VALUE(false, 1000, "Invalid Input Value"),
 
-    METHOD_NOT_ALLOWED(false, 1001, "Member Not Allowed"),
+    METHOD_NOT_ALLOWED(false, 1001, "Method Not Allowed"),
 
     ENTITY_NOT_FOUND(false, 1002, " Entity Not Found"),
     INTERNAL_SERVER_ERROR(false, 1003, "Server Error"),
