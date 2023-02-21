@@ -50,4 +50,9 @@ public class MemberController {
         MemberResponse memberResponse = MemberResponse.from(member);
         return BaseResponse.of(memberResponse);
     }
+
+    @PostMapping("/auth/refresh")
+    public BaseResponse<TokenDto> reIssue(@RequestBody TokenRequestDto tokenRequestDto){
+        return BaseResponse.of(memberService.reIssue(tokenRequestDto.getRefreshToken()));
+    }
 }

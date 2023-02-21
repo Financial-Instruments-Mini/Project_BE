@@ -1,17 +1,18 @@
 package com.financial.member.service;
 
-import com.financial.member.dto.LoginRequest;
-import com.financial.member.dto.MemberRequest;
-import com.financial.member.dto.MemberResponse;
-import com.financial.member.dto.MemberUpdateRequest;
+import com.financial.member.dto.*;
 import com.financial.member.entity.Member;
+import com.financial.member.entity.RefreshToken;
 import com.financial.member.jwt.JwtUtils;
 import com.financial.member.repository.MemberRepository;
+import com.financial.member.repository.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
 
 @Service
 @RequiredArgsConstructor
@@ -23,15 +24,21 @@ public class MemberService {
 
     private final JwtUtils jwtUtils;
 
+    private final RefreshTokenRepository refreshTokenRepository;
+
     @Transactional
-    public MemberResponse signup(MemberRequest memberRequest){
-        if (isDuplicate(memberRequest.getEmail())){
+    public MemberResponse signup(MemberRequest memberRequest) {
+        if (isDuplicate(memberRequest.getEmail())) {
             return null;
         }
         memberRequest.encodePassword(passwordEncoder);
         Member member = memberRepository.save(memberRequest.toEntity());
         MemberResponse memberResponse = MemberResponse.from(member);
-        memberResponse.setAccessToken(jwtUtils.createToken(member));
+        TokenDto tokenDto = issueToken(member);
+        memberResponse.setTokenDto(tokenDto);
+
+        RefreshToken originRefreshToken = refreshTokenRepository.findByMemberId(member.getId()).orElse(null);
+        updateToken(member, tokenDto, originRefreshToken);
         return memberResponse;
     }
 
@@ -44,20 +51,69 @@ public class MemberService {
 
         MemberResponse memberResponse = MemberResponse.from(member);
 
-        if (passwordEncoder.matches(loginRequest.getPassword(), member.getPassword())){
-            String token = jwtUtils.createToken(member);
-            memberResponse.setAccessToken(token);
+        if (passwordEncoder.matches(loginRequest.getPassword(), member.getPassword())) {
+            TokenDto tokenDto = issueToken(member);
+            memberResponse.setTokenDto(tokenDto);
+
+            RefreshToken originRefreshToken = refreshTokenRepository.findByMemberId(member.getId()).orElse(null);
+            updateToken(member, tokenDto, originRefreshToken);
         }
         return memberResponse;
     }
 
+    private void updateToken(Member member, TokenDto tokenDto, RefreshToken originRefreshToken) {
+        if (originRefreshToken == null) {
+            RefreshToken refreshToken = RefreshToken.builder().memberId(member.getId()).token(tokenDto.getRefreshToken()).build();
+            refreshTokenRepository.save(refreshToken);
+        } else {
+            originRefreshToken.updateToken(tokenDto.getRefreshToken());
+        }
+    }
+
     @Transactional
-    public void updateInfo(MemberUpdateRequest request, Long memberId){
+    public TokenDto reIssue(String refreshToken) {
+        if (!jwtUtils.isValidToken(refreshToken)) {
+            throw new IllegalArgumentException("refresh토큰 만료됨");
+        }
+
+        Long memberId = Long.valueOf(jwtUtils.getSubject(refreshToken));
+        Member member = memberRepository.findById(memberId).orElseThrow(
+                () -> new IllegalArgumentException("사용자를 찾을 수 없습니다.")
+        );
+        RefreshToken originRefreshToken = refreshTokenRepository.findByMemberId(memberId).orElseThrow(
+                () -> new IllegalArgumentException("토큰을 찾을 수 없습니다.")
+        );
+
+        if (!originRefreshToken.getToken().equals(refreshToken)) {
+            throw new IllegalArgumentException("리프레시 토큰이 불일치 합니다.");
+        }
+
+        TokenDto tokenDto = issueToken(member);
+        originRefreshToken.updateToken(tokenDto.getRefreshToken());
+
+        return tokenDto;
+    }
+
+    public TokenDto issueToken(Member member) {
+        Date date = new Date();
+        String accessToken = jwtUtils.createToken(member);
+        String refreshToken = jwtUtils.createRefreshToken(member.getId());
+
+        return TokenDto.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .accessStartTime(String.valueOf(date))
+                .accessExpirationTime(jwtUtils.getExpiration(accessToken))
+                .build();
+    }
+
+    @Transactional
+    public void updateInfo(MemberUpdateRequest request, Long memberId) {
         request.setPassword(passwordEncoder.encode(request.getPassword()));
         memberRepository.findById(memberId).ifPresent(member -> member.updateMember(request));
     }
 
-    public boolean isDuplicate(String email){
+    public boolean isDuplicate(String email) {
         return memberRepository.existsByEmail(email);
     }
 }
