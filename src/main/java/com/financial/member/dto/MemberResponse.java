@@ -11,7 +11,8 @@ import lombok.Setter;
 public class MemberResponse {
 
     private Long memberId;
-    private String accessToken;
+//    private String accessToken;
+    private TokenDto tokenDto;
 
     private String email;
     private String password;
