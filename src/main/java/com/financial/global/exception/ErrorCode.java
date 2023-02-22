@@ -13,7 +13,9 @@ public enum ErrorCode {
     INTERNAL_SERVER_ERROR(false, 1003, "Server Error"),
     INVALID_TYPE_VALUE(false, 1004, " Invalid Type Value"),
     HANDLE_ACCESS_DENIED(false, 1005, "Access is Denied"),
-    BAD_REQUEST(false,1006,"Bad Request");
+
+    INVALID_TOKEN(false, 1006, "The Token Has Expired"),
+    BAD_REQUEST(false,1007,"Bad Request");
 
     private final boolean success;
     private final int code;

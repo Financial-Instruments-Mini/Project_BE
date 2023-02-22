@@ -14,6 +14,8 @@ import org.springframework.data.domain.Slice;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @Api(tags = {"상품신청서비스"}, description = "금융상품 신청 관련 신청/조회/해지서비스")
 @RestController
 @RequiredArgsConstructor
@@ -23,7 +25,7 @@ public class ApplyController {
 
     @ApiOperation(value = "금융상품 신청", notes = "목록에 있는 금융상품을 신청한다.")
     @PostMapping
-    public String applyRegistration(@AuthenticationPrincipal MemberAdapter memberAdapter, @RequestBody ApplyRegistrationReq request) {
+    public String applyRegistration(@AuthenticationPrincipal MemberAdapter memberAdapter, @RequestBody @Valid ApplyRegistrationReq request) {
         return applyService.applyRegistration(memberAdapter, request);
     }
 

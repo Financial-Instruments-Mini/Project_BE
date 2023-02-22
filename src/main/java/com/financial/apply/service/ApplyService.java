@@ -4,6 +4,7 @@ import com.financial.apply.dto.ApplyRegistrationReq;
 import com.financial.apply.dto.MemberProductRes;
 import com.financial.apply.entity.Apply;
 import com.financial.apply.repository.ApplyRepository;
+import com.financial.global.exception.EntityNotFoundException;
 import com.financial.interest.entity.Interest;
 import com.financial.interest.repository.InterestRepository;
 import com.financial.member.dto.MemberAdapter;
@@ -32,8 +33,8 @@ public class ApplyService {
     @Transactional
     public String applyRegistration(MemberAdapter memberAdapter, ApplyRegistrationReq request) {
         Member member = memberAdapter.getMember();
-        Product product = productRepository.findById(request.getProductId()).orElseThrow(() -> new IllegalStateException());
-        Interest interest = interestRepository.findById(request.getInterestId()).orElseThrow(() -> new IllegalStateException());
+        Product product = productRepository.findById(request.getProductId()).orElseThrow(EntityNotFoundException::new);
+        Interest interest = interestRepository.findById(request.getInterestId()).orElseThrow(EntityNotFoundException::new);
 
         Apply apply = Apply.createApply(member, product, interest);
 
