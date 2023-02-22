@@ -1,5 +1,7 @@
 package com.financial.member.dto;
 
+import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiParam;
 import lombok.*;
 
 @Getter
@@ -7,6 +9,7 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TokenRequestDto {
 
+    @ApiModelProperty(name = "refreshToken", dataType = "String")
     private String refreshToken;
 
     @Builder
