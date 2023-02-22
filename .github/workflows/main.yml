@@ -19,8 +19,9 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Generate Keystore file from Github Secrets
-        run: echo $KEYSTORE_BASE64 | base64 -d > ./Users/jeonhongseok/ticcle/keystore_base64.p12
-#          base64 -d -i ./keystore/keystore.b64 > ./Users/jeonhongseok/ticcle/keystore.p12
+        run: |
+          echo "$KEYSTORE" | base64 -d > ./keystore/keystore_base64.b64
+          base64 -d -i ./keystore/keystore_base64.b64 > .keystore/keystore.p12
         env:
           KEYSTORE: ${{ secrets.APP_KEYSTORE_BASE64 }}
 
