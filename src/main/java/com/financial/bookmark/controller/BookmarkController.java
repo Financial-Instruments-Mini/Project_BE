@@ -13,6 +13,8 @@ import org.springframework.data.domain.Slice;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @Api(tags = {"관심상품서비스"}, description = "관심상품 관련 등록/조회/삭제서비스")
 @RestController
 @RequiredArgsConstructor
@@ -30,7 +32,7 @@ public class BookmarkController {
 
     @ApiOperation(value = "관심상품 등록", notes = "금융상품을 관심상품으로 등록")
     @PostMapping
-    public String applyRegistration(@AuthenticationPrincipal MemberAdapter memberAdapter, @RequestBody BookmarkRegistrationReq request) {
+    public String applyRegistration(@AuthenticationPrincipal MemberAdapter memberAdapter, @RequestBody @Valid BookmarkRegistrationReq request) {
         return bookmarkService.bookmarkRegistration(memberAdapter, request);
     }
 
