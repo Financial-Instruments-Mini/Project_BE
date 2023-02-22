@@ -1,5 +1,7 @@
 package com.financial.member.service;
 
+import com.financial.global.exception.EntityNotFoundException;
+import com.financial.global.exception.InvalidTokenException;
 import com.financial.interest.entity.Interest;
 import com.financial.interest.repository.InterestRepository;
 import com.financial.member.dto.*;
@@ -54,10 +56,7 @@ public class MemberService {
 
     @Transactional
     public MemberResponse login(LoginRequest loginRequest) {
-        Member member = memberRepository.findByEmail(loginRequest.getEmail()).orElse(null);
-        if (member == null) {
-            return null;
-        }
+        Member member = memberRepository.findByEmail(loginRequest.getEmail()).orElseThrow(EntityNotFoundException::new);
 
         MemberResponse memberResponse = MemberResponse.from(member);
 
@@ -67,6 +66,8 @@ public class MemberService {
 
             RefreshToken originRefreshToken = refreshTokenRepository.findByMemberId(member.getId()).orElse(null);
             updateToken(member, tokenDto, originRefreshToken);
+        } else{
+            throw new EntityNotFoundException();
         }
         return memberResponse;
     }
@@ -83,19 +84,15 @@ public class MemberService {
     @Transactional
     public TokenDto reIssue(String refreshToken) {
         if (!jwtUtils.isValidToken(refreshToken)) {
-            throw new IllegalArgumentException("refresh토큰 만료됨");
+            throw new InvalidTokenException();
         }
 
         Long memberId = Long.valueOf(jwtUtils.getSubject(refreshToken));
-        Member member = memberRepository.findById(memberId).orElseThrow(
-                () -> new IllegalArgumentException("사용자를 찾을 수 없습니다.")
-        );
-        RefreshToken originRefreshToken = refreshTokenRepository.findByMemberId(memberId).orElseThrow(
-                () -> new IllegalArgumentException("토큰을 찾을 수 없습니다.")
-        );
+        Member member = memberRepository.findById(memberId).orElseThrow(EntityNotFoundException::new);
+        RefreshToken originRefreshToken = refreshTokenRepository.findByMemberId(memberId).orElseThrow(EntityNotFoundException::new);
 
         if (!originRefreshToken.getToken().equals(refreshToken)) {
-            throw new IllegalArgumentException("리프레시 토큰이 불일치 합니다.");
+            throw new EntityNotFoundException();
         }
 
         TokenDto tokenDto = issueToken(member);

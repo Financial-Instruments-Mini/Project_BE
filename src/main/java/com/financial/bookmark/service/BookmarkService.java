@@ -4,6 +4,7 @@ import com.financial.apply.dto.MemberProductRes;
 import com.financial.bookmark.dto.BookmarkRegistrationReq;
 import com.financial.bookmark.entity.Bookmark;
 import com.financial.bookmark.repository.BookmarkRepository;
+import com.financial.global.exception.EntityNotFoundException;
 import com.financial.interest.entity.Interest;
 import com.financial.interest.repository.InterestRepository;
 import com.financial.member.dto.MemberAdapter;
@@ -35,8 +36,8 @@ public class BookmarkService {
     @Transactional
     public String bookmarkRegistration(MemberAdapter memberAdapter, BookmarkRegistrationReq request) {
         Member member = memberAdapter.getMember();
-        Product product = productRepository.findById(request.getProductId()).orElseThrow(() -> new IllegalStateException());
-        Interest interest = interestRepository.findById(request.getInterestId()).orElseThrow(() -> new IllegalStateException());
+        Product product = productRepository.findById(request.getProductId()).orElseThrow(EntityNotFoundException::new);
+        Interest interest = interestRepository.findById(request.getInterestId()).orElseThrow(EntityNotFoundException::new);
 
         Bookmark bookmark = Bookmark.crateBookMark(member, product, interest);
 

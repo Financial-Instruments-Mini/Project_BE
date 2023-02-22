@@ -1,5 +1,6 @@
 package com.financial.product.service;
 
+import com.financial.global.exception.EntityNotFoundException;
 import com.financial.interest.dto.InterestByAll;
 import com.financial.interest.entity.Interest;
 import com.financial.interest.repository.InterestRepository;
@@ -27,7 +28,7 @@ public class ProductService {
 //    }
 
     public ProductDetailResponseDTO productsDetail(Long productId) {
-        Product findProduct = productRepository.findById(productId).orElseThrow(() -> new IllegalStateException());
+        Product findProduct = productRepository.findById(productId).orElseThrow(EntityNotFoundException::new);
         ProductDetailResponseDTO detailResponse = new ProductDetailResponseDTO(findProduct);
         return detailResponse;
     }
