@@ -44,7 +44,7 @@ public class SwaggerConfig {
     }
 
     private ApiInfo swaggerInfo() {
-        return new ApiInfoBuilder().title("API Documentation")
+        return new ApiInfoBuilder().title("Ticcle API Documentation")
                 .description("Swagger UI 입니다.")
                 .license("라이센스 소유자")
                 .licenseUrl("라이센스 URL")
@@ -52,7 +52,7 @@ public class SwaggerConfig {
                 .build();
     }
     private ApiKey apiKey() {
-        return new ApiKey("JWT", "jwt", "header");
+        return new ApiKey("JWT", "Authorization", "header");
     }
 
     private SecurityContext securityContext() {
