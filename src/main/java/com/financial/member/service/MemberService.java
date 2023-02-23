@@ -1,5 +1,6 @@
 package com.financial.member.service;
 
+import com.financial.global.exception.DuplicateEmailException;
 import com.financial.global.exception.EntityNotFoundException;
 import com.financial.global.exception.InvalidTokenException;
 import com.financial.interest.entity.Interest;
@@ -41,7 +42,7 @@ public class MemberService {
     @Transactional
     public MemberResponse signup(MemberRequest memberRequest) {
         if (isDuplicate(memberRequest.getEmail())) {
-            return null;
+            throw new DuplicateEmailException();
         }
         memberRequest.encodePassword(passwordEncoder);
         Member member = memberRepository.save(memberRequest.toEntity());
