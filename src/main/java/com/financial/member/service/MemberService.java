@@ -117,7 +117,9 @@ public class MemberService {
 
     @Transactional
     public void updateInfo(MemberUpdateRequest request, Long memberId) {
-        request.setPassword(passwordEncoder.encode(request.getPassword()));
+        if (request.getPassword()!= null) {
+            request.setPassword(passwordEncoder.encode(request.getPassword()));
+        }
         memberRepository.findById(memberId).ifPresent(member -> member.updateMember(request));
     }
 

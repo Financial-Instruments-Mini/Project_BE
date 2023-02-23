@@ -59,9 +59,7 @@ public class Member {
         if (request.getPhoneNumber() != null) {
             this.phoneNumber=request.getPhoneNumber();
         }
-        if (request.getProductType() != null) {
-            this.survey.updateSurvey(surveyRequest);
-        }
+        this.survey.updateSurvey(surveyRequest);
     }
 }
 
