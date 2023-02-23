@@ -1,11 +1,15 @@
 package com.financial.member.dto;
 
 import com.financial.member.entity.Member;
+import com.financial.member.entity.enums.Job;
+import com.financial.member.entity.enums.ProductType;
+import com.financial.product.entity.enums.BankName;
 import io.swagger.annotations.ApiModelProperty;
-import io.swagger.annotations.ApiParam;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.Optional;
 
 @Setter
 @Getter
@@ -54,6 +58,9 @@ public class MemberResponse {
                     .birthDate(member.getBirthDate())
                     .build();
         }
+        Optional<ProductType> optionalProductType = Optional.ofNullable(member.getSurvey().getProductType());
+        Optional<Job> optionalJob = Optional.ofNullable(member.getSurvey().getJob());
+        Optional<BankName> optionalBankName = Optional.ofNullable(member.getSurvey().getBankName());
         return MemberResponse.builder()
                 .memberId(member.getId())
                 .email(member.getEmail())
@@ -61,9 +68,9 @@ public class MemberResponse {
                 .name(member.getName())
                 .phoneNumber(member.getPhoneNumber())
                 .birthDate(member.getBirthDate())
-                .productType(member.getSurvey().getProductType().getType())
-                .job(member.getSurvey().getJob().getJobName())
-                .bankName(member.getSurvey().getBankName().getBankName())
+                .productType(optionalProductType.map(ProductType::getType).orElse(null))
+                .job(optionalJob.map(Job::getJobName).orElse(null))
+                .bankName(optionalBankName.map(BankName::getBankName).orElse(null))
                 .build();
     }
 }
