@@ -3,7 +3,6 @@ package com.financial.apply.dto;
 import com.financial.apply.entity.Apply;
 import com.financial.bookmark.entity.Bookmark;
 import io.swagger.annotations.ApiModelProperty;
-import io.swagger.annotations.ApiParam;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,6 +11,9 @@ import lombok.Setter;
 @Setter
 @Builder
 public class MemberProductRes {
+
+    @ApiModelProperty(name = "id",dataType = "Long", example = "1")
+    private Long id; //applyId or bookmarkId
 
     @ApiModelProperty(name = "productId",dataType = "Long", example = "1")
     private Long productId;
@@ -40,6 +42,7 @@ public class MemberProductRes {
 
     public static MemberProductRes fromApply(Apply apply){
         return MemberProductRes.builder()
+                .id(apply.getId())
                 .productId(apply.getProduct().getId())
                 .bankName(apply.getProduct().getBankName().getBankName())
                 .productType(apply.getProduct().getProductType().getType())
@@ -53,6 +56,7 @@ public class MemberProductRes {
 
     public static MemberProductRes fromBookmark(Bookmark bookmark){
         return MemberProductRes.builder()
+                .id(bookmark.getId())
                 .productId(bookmark.getProduct().getId())
                 .bankName(bookmark.getProduct().getBankName().getBankName())
                 .productType(bookmark.getProduct().getProductType().getType())
