@@ -47,19 +47,24 @@ public class Member {
         this.survey = survey;
     }
 
-    public void updateMember(MemberUpdateRequest request){
+    public void updateMember(MemberUpdateRequest request) {
         Survey surveyRequest = Survey.builder()
                 .productType(request.getProductType())
                 .job(request.getJob())
                 .bankName(request.getBankName())
                 .build();
         if (request.getPassword() != null) {
-            this.password=request.getPassword();
+            this.password = request.getPassword();
         }
         if (request.getPhoneNumber() != null) {
-            this.phoneNumber=request.getPhoneNumber();
+            this.phoneNumber = request.getPhoneNumber();
         }
-        this.survey.updateSurvey(surveyRequest);
+
+        if (this.survey == null) {
+            this.survey = surveyRequest;
+        } else {
+            this.survey.updateSurvey(surveyRequest);
+        }
     }
 }
 
